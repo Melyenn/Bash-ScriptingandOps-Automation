@@ -5,7 +5,6 @@ set -euo pipefail
 CONFIG_FILE="${1:-/etc/backup.env}"
 
 if [[ -f "$CONFIG_FILE" ]]; then
-    # shellcheck disable=SC1090
     source "$CONFIG_FILE"
 else
     echo "Error: Configuration file '$CONFIG_FILE' not found." >&2
@@ -21,7 +20,6 @@ fi
 # Nạp thư viện alert dùng chung (nếu có)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -f "${SCRIPT_DIR}/lib/alert.sh" ]]; then
-    # shellcheck disable=SC1091
     source "${SCRIPT_DIR}/lib/alert.sh"
 else
     send_alert() {
@@ -47,7 +45,8 @@ cleanup() {
     if [[ $exit_code -ne 0 ]]; then
         local host
         host="$(hostname)"
-        local alert_body="BACKUP FAILED REPORT:
+        local alert_body
+        alert_body="BACKUP FAILED REPORT:
 ----------------------------------------
 Host: ${host}
 Exit Code: ${exit_code}

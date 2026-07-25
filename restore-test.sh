@@ -32,6 +32,7 @@ echo "[INFO] Testing restore on archive: ${LATEST_ARCHIVE}"
 # Throwaway temporary directory
 TEST_DIR=$(mktemp -d /tmp/web01_restore_test.XXXXXX)
 
+# shellcheck disable=SC2329,SC2317
 cleanup() {
     rm -rf "$TEST_DIR"
 }
