@@ -5,6 +5,7 @@ set -euo pipefail
 CONFIG_FILE="${1:-/etc/backup.env}"
 
 if [[ -f "$CONFIG_FILE" ]]; then
+    # shellcheck disable=SC1090
     source "$CONFIG_FILE"
 else
     echo "Error: Configuration file '$CONFIG_FILE' not found." >&2
@@ -20,6 +21,7 @@ fi
 # Nạp thư viện alert dùng chung (nếu có)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -f "${SCRIPT_DIR}/lib/alert.sh" ]]; then
+    # shellcheck disable=SC1091
     source "${SCRIPT_DIR}/lib/alert.sh"
 else
     send_alert() {
@@ -40,6 +42,7 @@ TMP_DIR=$(mktemp -d /tmp/web01_backup.XXXXXX)
 ERROR_REASON="An unexpected error occurred during execution."
 
 # 2. Đăng ký trap cleanup EXIT: Gửi email BACKUP FAILED nếu lỗi và luôn dọn dẹp TMP_DIR
+# shellcheck disable=SC2329,SC2317
 cleanup() {
     local exit_code=$?
     if [[ $exit_code -ne 0 ]]; then
@@ -62,6 +65,7 @@ Temporary directory cleaned: ${TMP_DIR}"
 trap cleanup EXIT
 
 # Task 3: Error Handler on ERR (Bắt số dòng, câu lệnh lỗi và exit code)
+# shellcheck disable=SC2329,SC2317
 on_error() {
     local line_no="$1"
     local command="$2"
