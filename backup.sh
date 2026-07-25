@@ -20,9 +20,9 @@ fi
 
 # Nạp thư viện alert dùng chung (nếu có)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/lib/alert.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/alert.sh" ]]; then
     # shellcheck disable=SC1091
-    source "${SCRIPT_DIR}/lib/alert.sh"
+    source "${SCRIPT_DIR}/alert.sh"
 else
     send_alert() {
         local subject="$1"
