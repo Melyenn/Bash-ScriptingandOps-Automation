@@ -208,6 +208,15 @@ tail -f /var/log/web01-backup.log
 sudo journalctl -u crond --since "10 minutes ago"
 ```
 
+### Tại sao script chạy tay OK nhưng có thể lỗi dưới Cron?
+
+**3 nguyên nhân chính gây lỗi:**
+1. **Cron không biết đường dẫn (`PATH` tối giản):** Không tự tìm được công cụ ngoài `/usr/bin:/bin` nếu không ghi rõ đường dẫn tuyệt đối.
+2. **Cron không nạp cấu hình cá nhân (Non-interactive shell):** Không đọc file `~/.bashrc` hay `~/.bash_profile`.
+3. **Cron đứng sai vị trí:** Mặc định chạy từ thư mục Home (`~`), dễ bị lỗi file not found nếu dùng đường dẫn tương đối.
+
+*Giải pháp triển khai:* Khai báo `PATH` và `SHELL` ngay trong file `cron/crontab`, dùng đường dẫn tuyệt đối khi gọi script, và dùng `SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"` trong code để tự xác định vị trí file.
+
 ---
 
 ## Báo cáo chi tiết

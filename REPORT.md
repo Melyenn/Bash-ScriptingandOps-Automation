@@ -211,7 +211,18 @@ Cấu hình cron job chạy tự động định kỳ:
 - **Log nhật ký thực thi kịch bản tự động theo lịch của Cron Daemon (`/var/log/cron`):**
 ![Log nhật ký thực thi kịch bản tự động theo lịch của Cron Daemon ](img/4-3.png)
 
-- **Cảnh báo tự động phát sinh (Triggered Condition) gửi qua Email khi dừng dịch vụ `myweb`:**
-![Cảnh báo tự động phát sinh (Triggered Condition) gửi qua Email khi dừng dịch vụ myweb](img/4-4.png)
+- **Cảnh báo tự động phát sinh gửi qua Email khi dừng dịch vụ `myweb`:**
+![Cảnh báo tự động phát sinh gửi qua Email khi dừng dịch vụ myweb](img/4-4.png)
 
-- **Lưu ý:** Các file .sh phải cấp quyền thực thi (chmod +x) thì cron job mới có thể chạy. Do file .sh trong repo đã có quyền execute nên chỉ cần nạp cronjob.
+### Giải thích lý thuyết: Tại sao script chạy tay OK nhưng có thể thất bại dưới Cron?
+
+**3 nguyên nhân chính gây lỗi khi chạy qua Cron:**
+1. **Cron không biết đường dẫn (`PATH` hạn chế):** Cron không có danh sách các thư mục chứa lệnh như khi gõ tay. Nếu không ghi rõ đường dẫn tuyệt đối hoặc không định nghĩa `PATH` trong crontab, Cron sẽ báo `command not found`.
+2. **Cron không nạp cấu hình cá nhân (Non-interactive Shell):** Cron không đọc các file `~/.bashrc` hay `~/.bash_profile`, nên các biến môi trường hay cài đặt riêng của bạn Cron đều không biết.
+3. **Cron đứng sai vị trí (Current Working Directory):** Cron mặc định đứng ở thư mục Home (`~`). Nếu script gọi file phụ thuộc bằng đường dẫn tương đối (như `./lib/alert.sh`) mà không xác định vị trí script, Cron sẽ tìm nhầm chỗ và báo lỗi không thấy file.
+
+**Cách khắc phục đã triển khai trong bài làm:**
+- Khai báo `PATH` và `SHELL` ngay đầu tệp `cron/crontab`.
+- Sử dụng đường dẫn tuyệt đối khi gọi script trong `crontab`.
+- Dùng `SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"` trong code để script tự xác định vị trí của nó và nạp đúng `lib/alert.sh`.
+- Cấp quyền thực thi `chmod +x` cho tất cả script.
