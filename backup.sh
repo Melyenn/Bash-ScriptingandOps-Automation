@@ -38,6 +38,9 @@ fi
 # Thư mục làm việc tạm thời
 TMP_DIR=$(mktemp -d /tmp/web01_backup.XXXXXX)
 
+# Global variable to store error details (Task 3)
+ERROR_REASON="An unexpected error occurred during execution."
+
 # 2. Đăng ký trap cleanup EXIT: Gửi email BACKUP FAILED nếu lỗi và luôn dọn dẹp TMP_DIR
 cleanup() {
     local exit_code=$?
@@ -48,19 +51,30 @@ cleanup() {
 ----------------------------------------
 Host: ${host}
 Exit Code: ${exit_code}
+Reason/Details: ${ERROR_REASON}
 Timestamp: $(date)
 ----------------------------------------
 Temporary directory cleaned: ${TMP_DIR}"
 
-        send_alert "BACKUP FAILED" "$alert_body" "$ALERT_TO"
+        send_alert "BACKUP FAILED: ${ERROR_REASON}" "$alert_body" "$ALERT_TO"
     fi
     rm -rf "$TMP_DIR"
 }
 trap cleanup EXIT
 
+# Task 3: Error Handler on ERR (Bắt số dòng, câu lệnh lỗi và exit code)
+on_error() {
+    local line_no="$1"
+    local command="$2"
+    local exit_code="$3"
+    ERROR_REASON="Command '${command}' failed at line ${line_no} with exit code ${exit_code}."
+}
+trap 'on_error $LINENO "$BASH_COMMAND" $?' ERR
+
 # Kiểm tra thư mục nguồn tồn tại
 if [[ ! -d "$DATA_DIR" ]]; then
-    echo "Error: Source directory '$DATA_DIR' does not exist." >&2
+    ERROR_REASON="Source directory '$DATA_DIR' does not exist."
+    echo "Error: ${ERROR_REASON}" >&2
     exit 1
 fi
 

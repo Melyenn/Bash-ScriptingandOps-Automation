@@ -114,7 +114,7 @@ Tệp `backup.sh`:
   chmod +x restore-test.sh
   ./restore-test.sh /srv/backup-target
   ```
-
+  
 ### Bằng chứng nghiệm thu
 - Tạo thư mục backup và cấp quyền cho user
   ```bash
@@ -126,5 +126,36 @@ Tệp `backup.sh`:
 ![Khôi phục dữ liệu thành công](img/2-2.png)
 
 - **Giả lập lỗi & kiểm chứng bẫy lỗi `trap cleanup EXIT`**
-- **Thực nghiệm:** Đặt `DATA_DIR="/path/not/exist"` trong cấu hình tạm và chạy kịch bản:`
+- **Thực nghiệm:** Đặt `DATA_DIR="/path/not/exist"` trong cấu hình tạm và chạy kịch bản:
 ![Cảnh báo trên gmail khi DATA_DIR không tồn tại](img/2-3.png)
+
+---
+
+## Task 3 — Error trapping and linting (2.0 pts)
+
+### Tóm tắt giải pháp
+1. Tích hợp bẫy `trap 'on_error $LINENO "$BASH_COMMAND" $?' ERR` vào kịch bản `backup.sh`.
+2. Hàm `on_error()` trích xuất chính xác **số dòng (line number)**, **câu lệnh bị lỗi (command)**, **exit code** và **hostname** để lưu vào biến `ERROR_REASON` trước khi ngắt kịch bản.
+3. Bẫy `trap cleanup EXIT` tiếp nhận thông tin từ `on_error()` để gửi email cảnh báo khẩn cấp và dọn dẹp thư mục tạm `/tmp/web01_backup.XXXXXX`.
+4. Rà soát cú pháp toàn bộ các tệp kịch bản (`*.sh`) bằng `shellcheck` và khắc phục triệt để các cảnh báo.
+
+### Lệnh thực thi
+
+- **1. Kiểm tra cú pháp tĩnh bằng ShellCheck (Static Analysis):**
+  Rà soát cú pháp toàn bộ các tệp kịch bản để đảm bảo không có cảnh báo/lỗi cú pháp trước khi vận hành:
+  ```bash
+  shellcheck health-check.sh backup.sh restore-test.sh lib/alert.sh
+  echo "Exit code: $?"
+  ```
+
+- **2. Kiểm thử bẫy lỗi `trap ERR` khi thực thi (Forced Runtime Error):**
+  Sau khi mã nguồn đã chuẩn cú pháp, chèn câu lệnh cố tình bị lỗi vào `backup.sh` để kiểm thử bẫy lỗi runtime:
+  ```bash
+  # 1. Chèn câu lệnh cố tình lỗi vào kịch bản
+  sed -i '/# 4. Đóng gói/i tar -czf /tmp/out.tgz /no/such/dir' backup.sh
+
+  # 2. Thực thi kịch bản để kích hoạt trap ERR
+  ./backup.sh
+  ```
+
+### Bằng chứng nghiệm thu
