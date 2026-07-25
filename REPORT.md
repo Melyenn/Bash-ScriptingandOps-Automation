@@ -42,7 +42,7 @@
   ```
 > **Ghi chú**: Lí do sử dụng Systemd thay cho việc chạy trực tiếp command `python3 -m http.server 8080 &` là để đảm bảo dịch vụ luôn hoạt động ổn định, tự khởi động lại khi gặp lỗi và có thể quản lý dễ dàng thông qua các câu lệnh `systemctl`.
 
-![cấu hình web endpoint](images/image.png)
+![cấu hình web endpoint](img/cauhinhwebendpoint.png)
 
 ### 1.2. Cấu hình Email Alert Transport
 - **Giải pháp lựa chọn:** Cấu hình động kết hợp (Hybrid approach) được viết trong thư viện dùng chung `lib/alert.sh`.
@@ -62,3 +62,27 @@ Tệp `health-check.sh` đọc cấu hình từ `/etc/monitoring.env`, kiểm tr
 4. Phản hồi từ HTTP endpoint (`curl -sf --max-time 5`).
 
 Các vi phạm được gom vào mảng `ALERTS=()`. Cuối kịch bản, nếu `ALERTS` có phần tử, hàm `send_alert()` gửi **đúng 1 email** danh sách tất cả cảnh báo.
+
+### Lệnh thực thi
+
+- **Cấp quyền thực thi và chạy kịch bản:**
+  ```bash
+  chmod +x health-check.sh
+  ./health-check.sh
+  ```
+- **Kiểm tra trạng thái sau khi chạy (Exit Code):**
+  ```bash
+  echo "Exit code: $?"
+  # Output: 0 (Hệ thống bình thường, không phát hiện lỗi)
+  ```
+
+### Bằng chứng nghiệm thu
+
+Kiểm tra khi hệ thống bình thường: Giả sử DISK_THRESHOLD = 85. (DISK_THRESHOLD là ngưỡng cảnh báo, khi dung lượng ổ cứng vượt ngưỡng này thì sẽ gửi cảnh báo)
+![Kiểm tra khi hệ thống bình thường 1](img/1-1.png)
+
+Kiểm tra khi hệ thống không bình thường: Giả sử tắt HTTP endpoint.
+![Tắt HTTP endpoint](img/1-2.png)
+![Cảnh báo trên gmail khi tắt HTTP endpoint](img/1-3.png)
+Kiểm tra khi hệ thống không bình thường: Giả sử giảm DISK_THRESHOLD xuống 1%.
+![Cảnh báo trên gmail khi giảm DISK_THRESHOLD](img/1-4.png)
