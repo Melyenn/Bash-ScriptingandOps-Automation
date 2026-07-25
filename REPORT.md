@@ -161,8 +161,38 @@ Tệp `backup.sh`:
 ### Bằng chứng nghiệm thu
 
 - **Kiểm tra với cú pháp ShellCheck**
-![ShellCheck](img/3-1.png)!
-
+![ShellCheck](img/3-1.png)
 
 - **Thực thi kịch bản để kích hoạt trap ERR**
 ![trap ERR](img/3-2.png)
+
+## Task 4 — Scheduling with cron (1.5 pts)
+
+### Tóm tắt giải pháp
+Cấu hình cron job chạy tự động định kỳ:
+- `health-check.sh`: Chạy mỗi 5 phút (`*/5 * * * *`).
+- `backup.sh`: Chạy hàng ngày lúc 02:00 AM (`0 2 * * *`).
+
+### Lệnh thực thi
+
+- **Cấu hình và kích hoạt Cron Job:**
+  ```bash
+  # Nạp cấu hình crontab
+  crontab cron/crontab
+
+  # Kiểm tra danh sách cron job đã được nạp
+  crontab -l
+  ```
+
+- **Kiểm tra trạng thái sau khi cấu hình:**
+  ```bash
+  # Xem danh sách cron job đang hoạt động
+  crontab -l
+  # Output: Hiển thị nội dung file cron/crontab đã nạp
+
+  # Kiểm tra syslog để xác nhận cron job đã được hệ thống ghi nhận
+  grep cron /var/log/syslog
+  ```
+
+### Bằng chứng nghiệm thu
+
