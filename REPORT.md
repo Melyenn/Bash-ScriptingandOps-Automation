@@ -159,3 +159,10 @@ Tệp `backup.sh`:
   ```
 
 ### Bằng chứng nghiệm thu
+
+- **Kiểm tra với cú pháp ShellCheck**
+![ShellCheck](img/3-1.png)!
+
+
+- **Thực thi kịch bản để kích hoạt trap ERR**
+![trap ERR](img/3-2.png)
