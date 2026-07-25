@@ -208,4 +208,10 @@ Cấu hình cron job chạy tự động định kỳ:
 - **Kiểm tra xem hệ thống đã kích hoạt Cron chưa (Log hệ thống CentOS 9)**
 ![Kiểm tra hệ thống](img/4-2.png)
 
-**Note**: Các file .sh phải cấp quyền thực thi (chmod +x) thì cron job mới có thể chạy. Do file .sh trong repo đã có quyền execute nên chỉ cần nạp cronjob.
+- **Log nhật ký thực thi kịch bản tự động theo lịch của Cron Daemon (`/var/log/cron`):**
+![Log nhật ký thực thi kịch bản tự động theo lịch của Cron Daemon ](img/4-3.png)
+
+- **Cảnh báo tự động phát sinh (Triggered Condition) gửi qua Email khi dừng dịch vụ `myweb`:**
+![Cảnh báo tự động phát sinh (Triggered Condition) gửi qua Email khi dừng dịch vụ myweb](img/4-4.png)
+
+- **Lưu ý:** Các file .sh phải cấp quyền thực thi (chmod +x) thì cron job mới có thể chạy. Do file .sh trong repo đã có quyền execute nên chỉ cần nạp cronjob.
