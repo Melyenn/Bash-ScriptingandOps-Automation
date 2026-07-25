@@ -24,11 +24,11 @@ fi
 # Load alert library
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [[ -f "${SCRIPT_DIR}/alert.sh" ]]; then
+if [[ -f "${SCRIPT_DIR}/lib/alert.sh" ]]; then
     # shellcheck disable=SC1091
-    source "${SCRIPT_DIR}/alert.sh"
+    source "${SCRIPT_DIR}/lib/alert.sh"
 else
-    echo "Error: Alert library '${SCRIPT_DIR}/alert.sh' not found." >&2
+    echo "Error: Alert library '${SCRIPT_DIR}/lib/alert.sh' not found." >&2
     exit 1
 fi
 
