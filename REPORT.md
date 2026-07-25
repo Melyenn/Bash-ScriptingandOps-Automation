@@ -174,6 +174,11 @@ Cấu hình cron job chạy tự động định kỳ:
 - `backup.sh`: Chạy hàng ngày lúc 02:00 AM (`0 2 * * *`).
 
 ### Lệnh thực thi
+- **Quyền tạo file log trong /var/log:**
+  ```bash
+  sudo touch /var/log/web01-health.log /var/log/web01-backup.log
+  sudo chown melyen:melyen /var/log/web01-health.log /var/log/web01-backup.log
+  ```
 
 - **Cấu hình và kích hoạt Cron Job:**
   ```bash
@@ -190,9 +195,16 @@ Cấu hình cron job chạy tự động định kỳ:
   crontab -l
   # Output: Hiển thị nội dung file cron/crontab đã nạp
 
-  # Kiểm tra syslog để xác nhận cron job đã được hệ thống ghi nhận
-  grep cron /var/log/syslog
+  # Kiểm tra xem hệ thống đã kích hoạt Cron chưa (Log hệ thống CentOS 9):
+  sudo journalctl -u crond --since "10 minutes ago"
   ```
 
 ### Bằng chứng nghiệm thu
+- **Kiểm tra danh sách cron job đã được nạp**
+![crontab](img/4-1.png)
 
+
+- **Kiểm tra xem hệ thống đã kích hoạt Cron chưa (Log hệ thống CentOS 9)**
+![Kiểm tra hệ thống](img/4-2.png)
+
+**Note**: Các file .sh phải cấp quyền thực thi (chmod +x) thì cron job mới có thể chạy. Do file .sh trong repo đã có quyền execute nên chỉ cần nạp cronjob.
