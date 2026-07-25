@@ -19,7 +19,8 @@ Bash-ScriptingandOps-Automation/
 ├── backup.sh                   # Task 2 & 3: Kịch bản sao lưu dữ liệu tự động & bẫy lỗi ERR/EXIT
 ├── backup-error.sh             # Task 3: Kịch bản giả lập lỗi để kiểm thử bẫy lỗi ERR
 ├── restore-test.sh             # Task 2: Kịch bản khôi phục & xác minh tính toàn vẹn (md5sum)
-├── alert.sh                    # Thư viện dùng chung gửi email cảnh báo (msmtp / mail / fallback log)
+├── lib/
+│   └── alert.sh                # Thư viện dùng chung gửi email cảnh báo (msmtp / mail / fallback log)
 ├── cron/
 │   └── crontab                 # File cấu hình lịch chạy tự động Cron (Task 4)
 ├── examples/
@@ -168,7 +169,7 @@ Sử dụng script `backup-error.sh` hoặc chèn lệnh lỗi để xác nhận
 Đảm bảo toàn bộ các tệp `.sh` đạt chuẩn cú pháp Bash và không chứa lỗi:
 
 ```bash
-shellcheck health-check.sh backup.sh backup-error.sh restore-test.sh alert.sh
+shellcheck health-check.sh backup.sh backup-error.sh restore-test.sh lib/alert.sh
 ```
 
 ---
