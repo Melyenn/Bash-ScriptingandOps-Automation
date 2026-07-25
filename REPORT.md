@@ -144,7 +144,7 @@ Tệp `backup.sh`:
 - **1. Kiểm tra cú pháp tĩnh bằng ShellCheck (Static Analysis):**
   Rà soát cú pháp toàn bộ các tệp kịch bản để đảm bảo không có cảnh báo/lỗi cú pháp trước khi vận hành:
   ```bash
-  shellcheck health-check.sh backup.sh restore-test.sh lib/alert.sh
+  shellcheck *.sh
   echo "Exit code: $?"
   ```
 
