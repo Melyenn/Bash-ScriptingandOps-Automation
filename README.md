@@ -1,10 +1,8 @@
 # Web01 Ops Automation — Bash Scripting & Operations Toolkit
 
-Báo cáo và kịch bản tự động hóa giám sát, sao lưu, phục hồi dữ liệu và cảnh báo hệ thống cho máy chủ **`web01`**.
-
 ---
 
-## 📌 Thông tin sinh viên & Môi trường
+## Thông tin sinh viên & Môi trường
 
 - **Họ và tên:** Mai Thị Kim Duyên
 - **Mã sinh viên:** 23127185
@@ -13,7 +11,7 @@ Báo cáo và kịch bản tự động hóa giám sát, sao lưu, phục hồi 
 
 ---
 
-## 📁 Cấu trúc thư mục dự án
+## Cấu trúc thư mục dự án
 
 ```text
 Bash-ScriptingandOps-Automation/
@@ -34,7 +32,7 @@ Bash-ScriptingandOps-Automation/
 
 ---
 
-## ⚙️ Hướng dẫn cài đặt & Thiết lập môi trường
+## Hướng dẫn cài đặt & Thiết lập môi trường
 
 ### 1. Chuẩn bị Web Endpoint (`myweb`)
 
@@ -100,12 +98,12 @@ sudo chown -R $USER:$USER /srv/backup-target
 
 ---
 
-## 🚀 Hướng dẫn Sử dụng & Thực thi các Kịch bản
+## Hướng dẫn Sử dụng & Thực thi các Kịch bản
 
 ### 1. Cấp quyền thực thi cho các script
 
 ```bash
-chmod +x health-check.sh backup.sh backup-error.sh restore-test.sh alert.sh
+chmod +x *.sh
 ```
 
 ---
@@ -117,9 +115,6 @@ Kịch bản kiểm tra Disk Usage, Free RAM, Systemd Services (`sshd`, `crond`,
 ```bash
 # Chạy trực tiếp (sử dụng cấu hình mặc định /etc/monitoring.env)
 ./health-check.sh
-
-# Hoặc truyền file cấu hình tuỳ chỉnh
-./health-check.sh examples/monitoring.env.example
 
 # Kiểm tra mã thoát (0 nghĩa là hệ thống bình thường, im lặng không phát lỗi)
 echo $?
@@ -163,8 +158,7 @@ Sử dụng script `backup-error.sh` hoặc chèn lệnh lỗi để xác nhận
 # Chạy script thử nghiệm lỗi
 ./backup-error.sh
 
-# Kiểm tra log email cảnh báo phát sinh tại ~/alerts.log (hoặc hộp thư Gmail)
-tail -n 25 ~/alerts.log
+#Kiểm tra alert.log hoặc Gmail
 ```
 
 ---
@@ -179,7 +173,7 @@ shellcheck health-check.sh backup.sh backup-error.sh restore-test.sh alert.sh
 
 ---
 
-## ⏰ Cấu hình Tự động hóa với Cron (`cron`)
+## Cấu hình Tự động hóa với Cron (`cron`)
 
 ### 1. Tạo các file log hệ thống
 
@@ -215,6 +209,6 @@ sudo journalctl -u crond --since "10 minutes ago"
 
 ---
 
-## 📑 Báo cáo chi tiết
+## Báo cáo chi tiết
 
-Bằng chứng thực nghiệm, hình ảnh minh họa màn hình nghiệm thu cho cả 4 Task cùng câu trả lời cho các câu hỏi lý thuyết được ghi nhận đầy đủ tại file **[`REPORT.md`](REPORT.md)**.
+Bằng chứng thực nghiệm, hình ảnh minh họa màn hình nghiệm thu cho cả 4 Task được ghi trong file **[`REPORT.md`](REPORT.md)**.
