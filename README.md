@@ -6,8 +6,8 @@
 
 - **Họ và tên:** Mai Thị Kim Duyên
 - **Mã sinh viên:** 23127185
-- **Host / OS:** `web01` (CentOS Stream 9 / Linux VM)
-- **Repository:** `Bash-ScriptingandOps-Automation`
+- **OS:** CentOS Stream 9 
+- **Repository:** https://github.com/Melyenn/Bash-ScriptingandOps-Automation.git
 
 ---
 
@@ -206,17 +206,10 @@ tail -f /var/log/web01-backup.log
 
 # Xem nhật ký hệ thống cron (CentOS / RHEL)
 sudo journalctl -u crond --since "10 minutes ago"
+
+# Log nhật ký thực thi kịch bản tự động theo lịch của Cron Daemon (`/var/log/cron`)
+tail -f /var/log/cron
 ```
-
-### Tại sao script chạy tay OK nhưng có thể lỗi dưới Cron?
-
-**3 nguyên nhân chính gây lỗi:**
-1. **Cron không biết đường dẫn (`PATH` tối giản):** Không tự tìm được công cụ ngoài `/usr/bin:/bin` nếu không ghi rõ đường dẫn tuyệt đối.
-2. **Cron không nạp cấu hình cá nhân (Non-interactive shell):** Không đọc file `~/.bashrc` hay `~/.bash_profile`.
-3. **Cron đứng sai vị trí:** Mặc định chạy từ thư mục Home (`~`), dễ bị lỗi file not found nếu dùng đường dẫn tương đối.
-
-*Giải pháp triển khai:* Khai báo `PATH` và `SHELL` ngay trong file `cron/crontab`, dùng đường dẫn tuyệt đối khi gọi script, và dùng `SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"` trong code để tự xác định vị trí file.
-
 ---
 
 ## Báo cáo chi tiết
