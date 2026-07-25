@@ -116,3 +116,15 @@ Tệp `backup.sh`:
   ```
 
 ### Bằng chứng nghiệm thu
+- Tạo thư mục backup và cấp quyền cho user
+  ```bash
+  sudo mkdir -p /srv/backup-target
+  sudo chown -R $USER:$USER /srv/backup-target
+  ```
+- **Sao lưu thành công và khôi phục dữ liệu thành công**
+![Sao lưu thành công file .tar.gz](img/2-1.png)
+![Khôi phục dữ liệu thành công](img/2-2.png)
+
+- **Giả lập lỗi & kiểm chứng bẫy lỗi `trap cleanup EXIT`**
+- **Thực nghiệm:** Đặt `DATA_DIR="/path/not/exist"` trong cấu hình tạm và chạy kịch bản:`
+![Cảnh báo trên gmail khi DATA_DIR không tồn tại](img/2-3.png)
